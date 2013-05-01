@@ -7,7 +7,7 @@ require 'jasmine-headless-webkit'
 require 'keystone'
 require 'echoe'
 
-Echoe.new("scribe") do |p|
+Echoe.new("scribe-js") do |p|
   p.author = "Tim Shelburne"
   p.email = "shelburt02@gmail.com"
   p.url = "https://github.com/tshelburne/scribe-js"

@@ -15,7 +15,7 @@ bin/scribe.js
 config/assets.rb
 lib/scribe.rb
 lib/scribe/symbols.rb
-scribe.gemspec
+scribe-js.gemspec
 spec/jasmine.yml
 spec/runner.html
 spec/support/classes.coffee
