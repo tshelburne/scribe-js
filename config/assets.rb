@@ -1,4 +1,4 @@
-assets_are_in "#{::LIBRARY_NAME_UCASE.root_path}/assets"
+assets_are_in "#{::Scribe.root_path}/assets"
 
 asset 'scribe.js' do |a|
 	a.scan 'scripts/coffee'

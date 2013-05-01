@@ -6,15 +6,16 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Shelburne"]
-  s.date = "2013-04-29"
+  s.date = "2013-05-01"
   s.description = ""
   s.email = "shelburt02@gmail.com"
-  s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.rdoc", "lib/scribe.rb", "lib/scribe/symbols.rb"]
-  s.files = ["CHANGELOG", "Gemfile", "Gemfile.lock", "scribe.gemspec", "LICENSE", "Manifest", "README.rdoc", "Rakefile", "assets/scripts/coffee/library.coffee", "config/assets.rb", "lib/scribe.rb", "lib/scribe/symbols.rb", "spec/jasmine.yml", "spec/support/classes.coffee", "spec/support/helpers.coffee", "spec/support/mocks.coffee", "spec/support/objects.coffee", "spec/support/requirements.coffee"]
-  s.homepage = "https://github.com/tshelburne/GITHUB_NAME"
-  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "scribe", "--main", "README.rdoc"]
+  s.executables = ["scribe.js"]
+  s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.rdoc", "bin/scribe.js", "lib/scribe.rb", "lib/scribe/symbols.rb"]
+  s.files = ["CHANGELOG", "Gemfile", "Gemfile.lock", "LICENSE", "Manifest", "README.rdoc", "Rakefile", "assets/scripts/coffee/scribe/datastore.coffee", "assets/scripts/coffee/scribe/factory/entity_factory.coffee", "assets/scripts/coffee/scribe/factory/entity_mapper.coffee", "assets/scripts/coffee/scribe/factory/reference_property.coffee", "assets/scripts/coffee/scribe/repositories/entity_metadata.coffee", "assets/scripts/coffee/scribe/repositories/entity_repository.coffee", "bin/scribe.js", "config/assets.rb", "lib/scribe.rb", "lib/scribe/symbols.rb", "scribe.gemspec", "spec/jasmine.yml", "spec/runner.html", "spec/support/classes.coffee", "spec/support/helpers.coffee", "spec/support/mocks.coffee", "spec/support/objects.coffee", "spec/support/requirements.coffee", "spec/tests/datastore_spec.coffee"]
+  s.homepage = "https://github.com/tshelburne/scribe-js"
+  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Scribe", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
-  s.rubyforge_project = "library_name_lcase"
+  s.rubyforge_project = "scribe"
   s.rubygems_version = "1.8.24"
   s.summary = ""
 

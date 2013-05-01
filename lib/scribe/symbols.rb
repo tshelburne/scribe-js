@@ -1,6 +1,6 @@
 require "keystone"
 
-module LIBRARY_NAME_UCASE
+module Scribe
 	
 	def self.pipeline
 		@@pipeline ||= ::Keystone.bootstrap("#{root_path}/config/assets.rb")
