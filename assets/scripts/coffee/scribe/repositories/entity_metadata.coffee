@@ -1,3 +1,5 @@
+ReferenceProperty = require 'scribe/factory/reference_property'
+
 #
 # @author - Tim Shelburne <tim@musiconelive.com>
 #
@@ -29,6 +31,6 @@ class EntityMetadata
     @references.length > 0 or @referenceCollections.length > 0
 
   isReference = (value)->
-    value.hasOwnProperty("entityType") and value.hasOwnProperty("entityId")
+    value instanceof ReferenceProperty
 
 return EntityMetadata
