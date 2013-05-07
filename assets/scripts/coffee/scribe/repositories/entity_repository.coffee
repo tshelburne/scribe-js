@@ -9,7 +9,7 @@ class EntityRepository
 
   constructor: (@type)->
     @entityList = []
-    @metadata = null
+    @metadata = new EntityMetadata()
 
   canHandle: (type)->
     @type == type
@@ -18,8 +18,8 @@ class EntityRepository
     @metadata.hasReferences()
 
   add: (entity)->
-    unless @metadata?
-      @metadata = new EntityMetadata(entity)
+    unless @metadata.isBuilt
+      @metadata.buildFromInstance(entity)
     @entityList.push entity
 
   remove: (entity)->

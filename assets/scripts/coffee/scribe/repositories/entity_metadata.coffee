@@ -5,24 +5,30 @@
 #
 class EntityMetadata
 
-  constructor: (entity)->
-    @type = entity.entityType
+  constructor: ->
+    @isBuilt = false
+    @type = ""
     @properties = []
     @references = []
     @referenceCollections = []
 
-    for prop, value of entity
-      if value instanceof Array and value.length > 0 and @isReference(value[0])
+  buildFromInstance: (instance)->
+    @type = instance.entityType
+
+    for prop, value of instance
+      if value instanceof Array and value.length > 0 and isReference(value[0])
         @referenceCollections.push(prop)
-      else if @isReference(value)
+      else if isReference(value)
         @references.push(prop)
       else
         @properties.push prop
 
-  isReference: (value)->
-    value.hasOwnProperty("entityType") and value.hasOwnProperty("entityId")
+    @isBuilt = true
 
   hasReferences: ->
     @references.length > 0 or @referenceCollections.length > 0
+
+  isReference = (value)->
+    value.hasOwnProperty("entityType") and value.hasOwnProperty("entityId")
 
 return EntityMetadata
