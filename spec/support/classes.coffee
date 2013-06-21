@@ -35,7 +35,7 @@ class CollectionParentEntity
 # MAPPERS
 #
 EntityMapper = require "scribe/factory/entity_mapper"
-ReferenceProperty = require "scribe/factory/reference_property"
+ReferenceProperty = require "scribe/references/reference_property"
 
 globalize class ReferenceEntityOneMapper extends EntityMapper
   constructor: ->

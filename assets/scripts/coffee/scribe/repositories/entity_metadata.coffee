@@ -1,4 +1,4 @@
-ReferenceProperty = require 'scribe/factory/reference_property'
+ReferenceProperty = require 'scribe/references/reference_property'
 
 #
 # @author - Tim Shelburne <tim@musiconelive.com>
