@@ -28,7 +28,7 @@ class EntityMetadata
     @isBuilt = true
 
   hasReferences: ->
-    @references.length > 0 or @referenceCollections.length > 0
+    if @isBuilt then @references.length > 0 or @referenceCollections.length > 0 else null
 
   isReference = (value)->
     value instanceof ReferenceProperty

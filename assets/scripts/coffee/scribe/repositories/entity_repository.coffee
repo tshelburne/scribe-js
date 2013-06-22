@@ -11,54 +11,49 @@ class EntityRepository
     @entityList = []
     @metadata = new EntityMetadata()
 
-  canHandle: (type)->
-    @type == type
-
-  hasReferences: ->
-    @metadata.hasReferences()
+  canHandle: (type)-> @type is type
 
   add: (entity)->
     unless @metadata.isBuilt
       @metadata.buildFromInstance(entity)
     @entityList.push entity
 
-  remove: (entity)->
-    @entityList.splice @entityList.indexOf(entity), 1
+  remove: (entity)-> @entityList.splice @entityList.indexOf(entity), 1
 
   find: (id)->
     for entity in @entityList
-      return entity if entity.id == id
+      return entity if entity.id is id
     null
 
-  findAll: ->
-    @entityList
+  findAll: -> @entityList
 
   findBy: (criteria)->
     results = []
     for entity in @entityList
-      if @isMatch(entity, criteria)
+      if isMatch(entity, criteria)
         results.push entity
     results
 
   findOneBy: (criteria)->
     for entity in @entityList
-      if @isMatch(entity, criteria)
+      if isMatch(entity, criteria)
         return entity
     null
 
-  isMatch: (entity, criteria)->
+  numEntities: -> @entityList.length
+
+  hasReferences: -> @metadata.hasReferences()
+
+  numReferenceProperties: -> @metadata.references.length
+
+  numReferenceCollections: -> @metadata.referenceCollections.length
+
+  isMatch = (entity, criteria)->
+    # return false unless entity[prop] is value for prop, value of criteria
+    # true
     match = true
     for prop, value of criteria
-      match = if match then entity[prop] == criteria[prop] else false
+      match = if match then entity[prop] is criteria[prop] else false
     match
-
-  numEntities: ->
-    @entityList.length
-
-  numReferenceProperties: ->
-    @metadata.references.length
-
-  numReferenceCollections: ->
-    @metadata.referenceCollections.length
 
 return EntityRepository

@@ -1,20 +1,20 @@
 #
 # ENTITIES
 #
-class ReferenceEntityOne
+globalize class ReferenceEntityOne
   constructor:(@id)->
     @propOne
     @hydrated = true
 
 
-class ReferenceEntityTwo
+globalize class ReferenceEntityTwo
   constructor:(@id)->
     @propOne
     @propTwo
     @hydrated = true
 
 
-class ParentEntity
+globalize class ParentEntity
   constructor:(@id)->
     @propOne
     @referenceOne
@@ -22,7 +22,7 @@ class ParentEntity
     @hydrated = false
 
 
-class CollectionParentEntity
+globalize class CollectionParentEntity
   constructor:(@id)->
     @propOne
     @referenceOne

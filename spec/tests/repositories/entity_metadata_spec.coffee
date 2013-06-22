@@ -56,3 +56,6 @@ describe "EntityMetadata", ->
 		it "will return false if there are no reference properties on this type of entity", ->
 			addBasicEntity()
 			expect(metadata.hasReferences()).toBeFalsy()
+
+		it "will return null if it has not yet been built", ->
+			expect(metadata.hasReferences()).toBeNull()
