@@ -3,18 +3,20 @@ EntityMetadata = require "scribe/repositories/entity_metadata"
 #
 # @author - Tim Shelburne <tim@musiconelive.com>
 #
-# contains all entities of a given type
+# contains all entities of a given constructor
 #
 class EntityRepository
 
-  constructor: (@type)->
+  constructor: ->
     @entityList = []
     @metadata = new EntityMetadata()
 
-  canHandle: (type)-> @type is type
+  canHandle: (entityCheck)-> 
+    return false if @metadata.klass is null 
+    entityCheck instanceof @metadata.klass or @metadata.klass is entityCheck or @metadata.klass.name is entityCheck
 
   add: (entity)->
-    @metadata.buildFromInstance(entity) unless @metadata.isBuilt
+    @metadata.buildFromInstance(entity) if @metadata.klass is null
     @entityList.push entity
 
   remove: (entity)-> @entityList.splice @entityList.indexOf(entity), 1
@@ -35,9 +37,9 @@ class EntityRepository
 
   hasReferences: -> @metadata.hasReferences()
 
-  numReferenceProperties: -> if @metadata.isBuilt then @metadata.references.length else null
+  numReferenceProperties: -> if @metadata.klass isnt null then @metadata.references.length else null
 
-  numReferenceCollections: -> if @metadata.isBuilt then @metadata.referenceCollections.length else null
+  numReferenceCollections: -> if @metadata.klass isnt null then @metadata.referenceCollections.length else null
 
   isMatch = (entity, criteria)->
     return false for prop, value of criteria when entity[prop] isnt value

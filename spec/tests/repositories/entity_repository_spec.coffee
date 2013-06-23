@@ -11,12 +11,23 @@ describe "EntityRepository", ->
 		entity
 
 	beforeEach ->
-		repo = new EntityRepository('type')
+		repo = new EntityRepository()
 
 	describe "#canHandle", ->
 
-		it "will return true when the repository handles the given type", ->
-			expect(repo.canHandle "type").toBeTruthy()
+		describe "will return true when", ->
+
+			beforeEach ->
+				addEntity('1234', 'one')
+
+			it "the constructor name is passed in", ->
+				expect(repo.canHandle "ReferenceEntityOne").toBeTruthy()
+
+			it "the constructor itself is passed in", ->
+				expect(repo.canHandle ReferenceEntityOne).toBeTruthy()
+
+			it "an instance of the constructor is passed in", ->
+				expect(repo.canHandle(new ReferenceEntityOne('2345'))).toBeTruthy()
 
 		it "will return false when the repository does not handle the given type", ->
 			expect(repo.canHandle "bad-type").toBeFalsy()
