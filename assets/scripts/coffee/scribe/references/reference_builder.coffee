@@ -1,5 +1,7 @@
 class ReferenceBuilder
 
+  
+
 	rebuildReferences: ->
     for repo in @repos # loop through all repositories
       if (repo.numEntities() > 0 and repo.hasReferences()) # check that entities in this repository have reference properties

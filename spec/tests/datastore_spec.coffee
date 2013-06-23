@@ -29,6 +29,12 @@ describe "DataStore", ->
 	beforeEach ->
 		datastore = new DataStore(entityFactory)
 
+	describe "::create", ->
+
+		it "will create a datastore using the packaged classes in Scribe", ->
+			datastore = DataStore.create([ new ReferenceEntityOneMapper(), new ReferenceEntityTwoMapper() ])
+			expect(datastore.constructor).toEqual DataStore
+
 	describe "#buildEntity", ->
 
 		it "will build an entity", ->
