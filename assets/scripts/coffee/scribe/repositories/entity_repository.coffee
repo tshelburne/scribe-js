@@ -40,11 +40,7 @@ class EntityRepository
   numReferenceCollections: -> if @metadata.isBuilt then @metadata.referenceCollections.length else null
 
   isMatch = (entity, criteria)->
-    # return false unless entity[prop] is value for prop, value of criteria
-    # true
-    match = true
-    for prop, value of criteria
-      match = if match then entity[prop] is criteria[prop] else false
-    match
+    return false for prop, value of criteria when entity[prop] isnt value
+    true
 
 return EntityRepository
