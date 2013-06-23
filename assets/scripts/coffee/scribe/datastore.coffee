@@ -10,7 +10,7 @@ class DataStore
   constructor: (@entityFactory)->
     @repos = []
 
-  @default: (mappers)->
+  @create: (mappers)->
     new @(new EntityFactory(mappers))
 
   buildEntity: (entityType, entityConfig, buildReferences = true)->
