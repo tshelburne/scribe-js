@@ -14,30 +14,21 @@ class EntityRepository
   canHandle: (type)-> @type is type
 
   add: (entity)->
-    unless @metadata.isBuilt
-      @metadata.buildFromInstance(entity)
+    @metadata.buildFromInstance(entity) unless @metadata.isBuilt
     @entityList.push entity
 
   remove: (entity)-> @entityList.splice @entityList.indexOf(entity), 1
 
   find: (id)->
-    for entity in @entityList
-      return entity if entity.id is id
+    return entity for entity in @entityList when entity.id is id
     null
 
   findAll: -> @entityList
 
-  findBy: (criteria)->
-    results = []
-    for entity in @entityList
-      if isMatch(entity, criteria)
-        results.push entity
-    results
+  findBy: (criteria)-> (entity for entity in @entityList when isMatch(entity, criteria))
 
   findOneBy: (criteria)->
-    for entity in @entityList
-      if isMatch(entity, criteria)
-        return entity
+    return entity for entity in @entityList when isMatch(entity, criteria)
     null
 
   numEntities: -> @entityList.length
