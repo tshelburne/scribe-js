@@ -4,18 +4,16 @@
 # the base data mapper
 #
 class EntityMapper
-  constructor: ()->
-    @type = null
+  constructor: ->
+    @entityClass = null
 
-  canHandle: (type)->
-    type is @type
+  canHandle: (entityClass)->
+    entityClass is @entityClass
 
   handle: (config)->
-    entity = @buildEntity(config)
-    entity.entityType = @type
-    entity
-
+    @buildEntity(config)
+    
   buildEntity: (config)->
-    alert "You must override the buildEntity() function to create a data mapper."
+    console.log "You must override the buildEntity() function to create a data mapper."
 
 return EntityMapper

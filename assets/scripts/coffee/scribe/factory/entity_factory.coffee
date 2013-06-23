@@ -6,9 +6,9 @@
 class EntityFactory
   constructor: (@mappers)->
 
-  build: (type, config)->
+  build: (entityClass, config)->
     for mapper in @mappers
-      return mapper.handle(config) if mapper.canHandle(type)
+      return mapper.handle(config) if mapper.canHandle(entityClass)
     return null
 
 return EntityFactory

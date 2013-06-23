@@ -39,7 +39,7 @@ ReferenceProperty = require "scribe/references/reference_property"
 
 globalize class ReferenceEntityOneMapper extends EntityMapper
   constructor: ->
-    @type = "referenceOne"
+    @entityClass = "ReferenceEntityOne"
 
   buildEntity:(config)->
     entity = new ReferenceEntityOne(config.id)
@@ -48,8 +48,8 @@ globalize class ReferenceEntityOneMapper extends EntityMapper
 
 
 globalize class ReferenceEntityTwoMapper extends EntityMapper
-  constructor:(type)->
-    @type = "referenceTwo"
+  constructor:->
+    @entityClass = "ReferenceEntityTwo"
 
   buildEntity:(config)->
     entity = new ReferenceEntityTwo(config.id)
@@ -59,28 +59,28 @@ globalize class ReferenceEntityTwoMapper extends EntityMapper
 
 
 globalize class ParentEntityMapper extends EntityMapper
-  constructor:(type)->
-    @type = "parent"
+  constructor:->
+    @entityClass = "ParentEntity"
 
   buildEntity:(config)->
     entity = new ParentEntity(config.id)
     entity.propOne = config.propOne
-    entity.referenceOne = new ReferenceProperty("referenceOne", config.referenceOne)
-    entity.referenceTwo = new ReferenceProperty("referenceTwo", config.referenceTwo)
+    entity.referenceOne = new ReferenceProperty(config.referenceOne.class, config.referenceOne.id)
+    entity.referenceTwo = new ReferenceProperty(config.referenceTwo.class, config.referenceTwo.id)
     entity
 
 
 globalize class CollectionParentEntityMapper extends EntityMapper
-  constructor:(type)->
-    @type = "collectionParent"
+  constructor:->
+    @entityClass = "CollectionParentEntity"
 
   buildEntity:(config)->
     entity = new CollectionParentEntity(config.id)
     entity.propOne = config.propOne
-    entity.referenceOne = new ReferenceProperty("referenceOne", config.referenceOne)
-    entity.referenceTwo = new ReferenceProperty("referenceTwo", config.referenceTwo)
+    entity.referenceOne = new ReferenceProperty(config.referenceOne.class, config.referenceOne)
+    entity.referenceTwo = new ReferenceProperty(config.referenceTwo.class, config.referenceTwo.id)
 
-    for refId in config.referenceCollection
-      entity.referenceCollection.push(new ReferenceProperty("referenceOne", refId))
+    for refId in config.referenceCollection.ids
+      entity.referenceCollection.push(new ReferenceProperty(config.referenceCollection.class, refId))
 
     entity

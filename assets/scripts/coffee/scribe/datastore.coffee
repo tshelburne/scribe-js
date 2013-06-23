@@ -13,14 +13,14 @@ class DataStore
   @create: (mappers)->
     new @(new EntityFactory(mappers))
 
-  buildEntity: (entityType, entityConfig, buildReferences = true)->
-    @getRepository(entityType).add(@entityFactory.build(entityType, entityConfig))
+  buildEntity: (entityClass, entityConfig, buildReferences = true)->
+    @getRepository(entityClass).add(@entityFactory.build(entityClass, entityConfig))
 
     @rebuildReferences() if buildReferences
 
-  buildEntities: (entityType, entityConfigs, buildReferences = true)->
+  buildEntities: (entityClass, entityConfigs, buildReferences = true)->
     for config in entityConfigs
-      @buildEntity entityType, config, false
+      @buildEntity entityClass, config, false
 
     @rebuildReferences() if buildReferences
 
@@ -34,7 +34,7 @@ class DataStore
             referencesBuilt = 0
             for propName in repo.metadata.references
               referenceProperty = entity[propName]
-              refRefo = @getRepository(referenceProperty.entityType)
+              refRefo = @getRepository(referenceProperty.entityClass)
               entityReference = if refRefo? then refRefo.find(referenceProperty.entityId) else null
               if entityReference?
                 referencesBuilt++
@@ -46,7 +46,7 @@ class DataStore
 
               collectionReferencesBuilt = 0
               for refIndex, referenceProperty of entity[collectionPropName]
-                collRefRepo = @getRepository(referenceProperty.entityType)
+                collRefRepo = @getRepository(referenceProperty.entityClass)
                 entityReference = if collRefRepo? then collRefRepo.find(referenceProperty.entityId) else null
                 if entityReference?
                   collectionReferencesBuilt++
@@ -58,16 +58,16 @@ class DataStore
             if referencesBuilt is repo.numReferenceProperties() and collectionsBuilt is repo.numReferenceCollections()
               entity.hydrated = true
 
-  getRepository: (entityType)->
+  getRepository: (entityClass)->
     for repo in @repos
-      if repo.canHandle entityType
+      if repo.canHandle entityClass
         return repo
 
-    newRepo = new EntityRepository(entityType)
+    newRepo = new EntityRepository(entityClass)
     @repos.push newRepo
     return newRepo
 
-  find: (entityType, id)->
-    @getRepository(entityType).find(id)
+  find: (entityClass, id)->
+    @getRepository(entityClass).find(id)
 
 return DataStore

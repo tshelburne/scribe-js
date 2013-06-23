@@ -23,6 +23,7 @@ helpers:
   - support/objects.coffee
   - support/classes.coffee
   - support/mocks.coffee
+  - support/example_config.js
 
 # spec_files
 #
