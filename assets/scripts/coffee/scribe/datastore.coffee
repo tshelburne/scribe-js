@@ -51,11 +51,11 @@ class DataStore
                 if entityReference?
                   collectionReferencesBuilt++
                   entity[collectionPropName][refIndex] = entityReference
-              if collectionReferencesBuilt == entity[collectionPropName].length
+              if collectionReferencesBuilt is entity[collectionPropName].length
                 collectionsBuilt++
 
             # check whether all references for this entity were built
-            if referencesBuilt == repo.numReferenceProperties() and collectionsBuilt == repo.numReferenceCollections()
+            if referencesBuilt is repo.numReferenceProperties() and collectionsBuilt is repo.numReferenceCollections()
               entity.hydrated = true
 
   getRepository: (entityType)->

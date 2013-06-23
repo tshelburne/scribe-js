@@ -44,9 +44,9 @@ class EntityRepository
 
   hasReferences: -> @metadata.hasReferences()
 
-  numReferenceProperties: -> @metadata.references.length
+  numReferenceProperties: -> if @metadata.isBuilt then @metadata.references.length else null
 
-  numReferenceCollections: -> @metadata.referenceCollections.length
+  numReferenceCollections: -> if @metadata.isBuilt then @metadata.referenceCollections.length else null
 
   isMatch = (entity, criteria)->
     # return false unless entity[prop] is value for prop, value of criteria

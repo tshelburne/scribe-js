@@ -1,4 +1,5 @@
 EntityRepository = require 'scribe/repositories/entity_repository'
+ReferenceProperty = require 'scribe/references/reference_property'
 
 describe "EntityRepository", ->
 	repo = null
@@ -88,14 +89,41 @@ describe "EntityRepository", ->
 
 	describe "#hasReferences", ->
 
-		it "will return whether the entities in this repository have reference properties", ->
+		it 'will return true when entities in this repository have one or more reference properties', ->
+			entity = new ParentEntity('1234')
+			entity.referenceOne = new ReferenceProperty('referenceOne', '1245')
+			repo.add(entity)
+			expect(repo.hasReferences()).toBeTruthy()
 
+		it 'will return false when entities in this repository have no reference properties', ->
+			repo.add(new ReferenceEntityOne('1234'))
+			expect(repo.hasReferences()).toBeFalsy()
+
+		it 'will return null when no entities have been added to this repository', ->
+			expect(repo.hasReferences()).toBeNull()
 
 	describe "#numReferenceProperties", ->
 
+		it 'will return the number of reference properties', ->
+			entity = new CollectionParentEntity('1234')
+			entity.referenceOne = new ReferenceProperty('referenceOne', '1245')
+			entity.referenceTwo = new ReferenceProperty('referenceTwo', '1246')
+			entity.referenceCollection = [ new ReferenceProperty('referenceOne', '1235') ]
+			repo.add(entity)
+			expect(repo.numReferenceProperties()).toEqual 2
+
+		it 'will return null when no entities have been added to this repository', ->
+			expect(repo.numReferenceProperties()).toBeNull()
+
 	describe "#numReferenceCollections", ->
 
-	describe "#hasReferences", ->
+		it 'will return the number of reference collection properties', ->
+			entity = new CollectionParentEntity('1234')
+			entity.referenceOne = new ReferenceProperty('referenceOne', '1245')
+			entity.referenceTwo = new ReferenceProperty('referenceTwo', '1246')
+			entity.referenceCollection = [ new ReferenceProperty('referenceOne', '1235') ]
+			repo.add(entity)
+			expect(repo.numReferenceCollections()).toEqual 1
 
-		it 'will check whether entities in this repository have one or more reference properties', ->
-			repo
+		it 'will return null when no entities have been added to this repository', ->
+			expect(repo.numReferenceCollections()).toBeNull()
