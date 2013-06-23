@@ -4,18 +4,15 @@ describe "EntityMetadata", ->
 	metadata = null
 
 	addBasicEntity = ->
-		entity = new ReferenceEntityOneMapper().buildEntity({ id: "1", propOne: "prop 1" })
-		entity.entityType = "referenceEntityOne"
+		entity = new ReferenceEntityOneMapper().buildEntity(mocks.datastoreConfig.ReferenceEntityOne[0])
 		metadata.buildFromInstance entity
 
 	addParentEntity = ->
-		entity = new ParentEntityMapper().buildEntity({ id: "2", propOne: "prop 2", referenceOne: "1", referenceTwo: "2" })
-		entity.entityType = "parentEntity"
+		entity = new ParentEntityMapper().buildEntity(mocks.datastoreConfig.ParentEntity[0])
 		metadata.buildFromInstance entity
 
 	addCollectionEntity = ->
-		entity = new CollectionParentEntityMapper().buildEntity({ id: "3", propOne: "prop 3", referenceOne: "1", referenceTwo: "2", referenceCollection: [ '1', '2', '3' ] })
-		entity.entityType = "collectionParentEntity"
+		entity = new CollectionParentEntityMapper().buildEntity(mocks.datastoreConfig.CollectionParentEntity[0])
 		metadata.buildFromInstance entity
 
 	beforeEach -> 
@@ -23,17 +20,13 @@ describe "EntityMetadata", ->
 
 	describe '#buildFromInstance', ->
 
-		it "will set the type to the instance's entityType", ->
+		it "will set the klass to the instance's constructor", ->
 			addBasicEntity()
-			expect(metadata.type).toEqual "referenceEntityOne"
-
-		it "will set the metadata to built", ->
-			addBasicEntity()
-			expect(metadata.isBuilt).toBeTruthy()
+			expect(metadata.klass).toEqual ReferenceEntityOne
 
 		it "will add basic properties into the properties list", ->
 			addBasicEntity()
-			expect(metadata.properties).toEqual [ "id", "hydrated", "propOne", "entityType" ]
+			expect(metadata.properties).toEqual [ "id", "hydrated", "propOne" ]
 
 		it "will add reference properties into the references list", ->
 			addParentEntity()

@@ -8,15 +8,13 @@ ReferenceProperty = require 'scribe/references/reference_property'
 class EntityMetadata
 
   constructor: ->
-    @isBuilt = false
-    @type = ""
+    @klass = null
     @properties = []
     @references = []
     @referenceCollections = []
 
   buildFromInstance: (instance)->
-    @type = instance.entityType
-
+    @klass = instance.constructor
     for prop, value of instance
       if value instanceof Array and value.length > 0 and isReference(value[0])
         @referenceCollections.push(prop)
@@ -25,9 +23,7 @@ class EntityMetadata
       else
         @properties.push prop
 
-    @isBuilt = true
-
-  hasReferences: -> if @isBuilt then @references.length > 0 or @referenceCollections.length > 0 else null
+  hasReferences: -> if @klass isnt null then @references.length > 0 or @referenceCollections.length > 0 else null
 
   isReference = (value)-> value instanceof ReferenceProperty
 
