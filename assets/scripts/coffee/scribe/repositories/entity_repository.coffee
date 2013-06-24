@@ -13,7 +13,7 @@ class EntityRepository
 
   canHandle: (entityCheck)-> 
     return false if @metadata.klass is null 
-    entityCheck instanceof @metadata.klass or @metadata.klass is entityCheck or @metadata.klass.name is entityCheck
+    @metadata.klass is entityCheck or @metadata.klass.name is entityCheck or entityCheck.constructor is @metadata.klass
 
   add: (entity)->
     @metadata.buildFromInstance(entity) if @metadata.klass is null
