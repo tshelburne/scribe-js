@@ -6,9 +6,11 @@ Manifest
 README.rdoc
 Rakefile
 assets/scripts/coffee/scribe/datastore.coffee
+assets/scripts/coffee/scribe/factory/auto_mapper.coffee
 assets/scripts/coffee/scribe/factory/entity_factory.coffee
 assets/scripts/coffee/scribe/factory/entity_mapper.coffee
-assets/scripts/coffee/scribe/factory/reference_property.coffee
+assets/scripts/coffee/scribe/references/reference_builder.coffee
+assets/scripts/coffee/scribe/references/reference_property.coffee
 assets/scripts/coffee/scribe/repositories/entity_metadata.coffee
 assets/scripts/coffee/scribe/repositories/entity_repository.coffee
 bin/scribe.js
@@ -19,8 +21,12 @@ scribe-js.gemspec
 spec/jasmine.yml
 spec/runner.html
 spec/support/classes.coffee
+spec/support/example_config.js
 spec/support/helpers.coffee
 spec/support/mocks.coffee
 spec/support/objects.coffee
 spec/support/requirements.coffee
 spec/tests/datastore_spec.coffee
+spec/tests/factory/auto_mapper_spec.coffee
+spec/tests/repositories/entity_metadata_spec.coffee
+spec/tests/repositories/entity_repository_spec.coffee
