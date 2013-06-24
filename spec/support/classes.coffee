@@ -3,30 +3,31 @@
 #
 globalize class ReferenceEntityOne
   constructor:(@id)->
-    @propOne
+    @propOne = null
     @hydrated = true
 
 
 globalize class ReferenceEntityTwo
   constructor:(@id)->
-    @propOne
-    @propTwo
+    @propOne = null
+    @propTwo = null
     @hydrated = true
 
 
 globalize class ParentEntity
   constructor:(@id)->
-    @propOne
-    @referenceOne
-    @referenceTwo
+    @propOne = null
+    @referenceOne = null
+    @referenceTwo = null
     @hydrated = false
 
 
 globalize class CollectionParentEntity
   constructor:(@id)->
-    @propOne
-    @referenceOne
-    @referenceTwo
+    @unConfigged = null
+    @propOne = null
+    @referenceOne = null
+    @referenceTwo = null
     @referenceCollection = []
     @hydrated = false
 
@@ -35,7 +36,16 @@ globalize class CollectionParentEntity
 # MAPPERS
 #
 EntityMapper = require "scribe/factory/entity_mapper"
+AutoMapper = require "scribe/factory/auto_mapper"
 ReferenceProperty = require "scribe/references/reference_property"
+
+globalize class ExtensionMapper extends AutoMapper
+  constructor: ->
+    super CollectionParentEntity
+
+  buildEntity: (config, entity)->
+    entity.unConfigged = "Customized"
+
 
 globalize class ReferenceEntityOneMapper extends EntityMapper
   constructor: ->

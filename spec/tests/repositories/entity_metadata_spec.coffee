@@ -26,7 +26,7 @@ describe "EntityMetadata", ->
 
 		it "will add basic properties into the properties list", ->
 			addBasicEntity()
-			expect(metadata.properties).toEqual [ "id", "hydrated", "propOne" ]
+			expect(metadata.properties).toEqual [ "id", "propOne", "hydrated" ]
 
 		it "will add reference properties into the references list", ->
 			addParentEntity()
