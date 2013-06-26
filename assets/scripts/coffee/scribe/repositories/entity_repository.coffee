@@ -12,11 +12,11 @@ class EntityRepository
     @metadata = new EntityMetadata()
 
   canHandle: (entityCheck)-> 
-    return false if @metadata.klass is null 
+    return false unless metadataHasBeenBuilt.call @
     @metadata.klass is entityCheck or @metadata.klass.name is entityCheck or entityCheck.constructor is @metadata.klass
 
   add: (entity)->
-    @metadata.buildFromInstance(entity) if @metadata.klass is null
+    @metadata.buildFromInstance(entity) unless metadataHasBeenBuilt.call @
     @entityList.push entity
 
   remove: (entity)-> @entityList.splice @entityList.indexOf(entity), 1
@@ -37,12 +37,15 @@ class EntityRepository
 
   hasReferences: -> @metadata.hasReferences()
 
-  numReferenceProperties: -> if @metadata.klass isnt null then @metadata.references.length else null
+  numReferenceProperties: -> if metadataHasBeenBuilt.call @ then @metadata.references.length else null
 
-  numReferenceCollections: -> if @metadata.klass isnt null then @metadata.referenceCollections.length else null
+  numReferenceCollections: -> if metadataHasBeenBuilt.call @ then @metadata.referenceCollections.length else null
 
   isMatch = (entity, criteria)->
     return false for prop, value of criteria when entity[prop] isnt value
     true
+
+  metadataHasBeenBuilt = ->
+    @metadata.klass isnt null
 
 return EntityRepository
