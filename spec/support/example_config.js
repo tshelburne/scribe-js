@@ -21,7 +21,7 @@ addMock('datastoreConfig', {
 				referenceOne: { class: "ReferenceEntityOne", id: "1" }, 
 				referenceTwo: { class: "ReferenceEntityTwo", id: "3" }, 
 				referenceCollection: { class: "ReferenceEntityOne", ids: [ "1", "2" ] }, 
-				mismatchedProperty:"don't find me"
+				mismatchedProperty: "don't find me"
 			}
 		]
 	});
