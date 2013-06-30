@@ -1,5 +1,3 @@
-ReferenceProperty = require 'scribe/references/reference_property'
-
 # 
 # @author - Tim Shelburne (tim@musiconelive.com)
 #
@@ -8,23 +6,27 @@ ReferenceProperty = require 'scribe/references/reference_property'
 #
 class AutoMapper
 
-  constructor: (@entityClass)->
+  constructor: (@entityClass, @referenceBuilder=null)->
 
   canHandle: (entityClass)-> entityClass is @entityClass.name
 
   handle: (config)-> 
     entity = map.call @, config
-    @buildEntity(config, entity) if @buildEntity?
+    @buildEntity?(config, entity)
+    @referenceBuilder.hydrateReferencesFor entity
     entity
+
+  # PRIVATE
 
   map = (config)->
     entity = new @entityClass(config.id)
     for prop, value of config
       if hasProperty entity, prop
         if isReferenceProperty value
-          entity[prop] = createReference value
+          @referenceBuilder.createReference(entity, prop, value.class, value.id)
         else if isReferenceCollectionProperty value
-          createReferenceCollection entity, prop, value
+          refIds = if 'id' of value then value.id else value.ids
+          @referenceBuilder.createReferenceCollection(entity, prop, value.class, refIds)
         else
           entity[prop] = value
     entity
@@ -34,20 +36,5 @@ class AutoMapper
   isReferenceProperty = (value)-> value instanceof Object and 'class' of value and 'id' of value and not (value.id instanceof Array)
 
   isReferenceCollectionProperty = (value)-> value instanceof Object and 'class' of value and ('ids' of value or ('id' of value and value.id instanceof Array))
-
-  createReference = (value)-> new ReferenceProperty(value.class, value.id)
-
-  createReferenceCollection = (entity, prop, value)->
-    capitalProp = toCapitalCase prop
-    refClass = value.class
-    refIds = if 'id' of value then value.id else value.ids
-    if entity["addTo#{capitalProp}"]?
-      for refId in refIds
-        reference = createReference({ class: refClass, id: refId })
-        entity["addTo#{capitalProp}"](reference)
-    else
-      entity[prop] = (createReference({ class: refClass, id: refId }) for refId in refIds)
-
-  toCapitalCase = (string)-> "#{string.charAt(0).toUpperCase()}#{string.slice(1)}"
 
 return AutoMapper

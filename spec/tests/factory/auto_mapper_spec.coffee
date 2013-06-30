@@ -1,11 +1,15 @@
 AutoMapper = require 'scribe/factory/auto_mapper'
-ReferenceProperty = require 'scribe/references/reference_property'
+
+EntityContainer = require 'scribe/repositories/entity_container'
+ReferenceBuilder = require 'scribe/factory/reference_builder'
 
 describe "AutoMapper", ->
-	mapper = null
+	mapper = container = null
 
 	beforeEach ->
-		mapper = new AutoMapper(CollectionParentEntity)
+		container = new EntityContainer()
+		referenceBuilder = new ReferenceBuilder(container)
+		mapper = new AutoMapper(CollectionParentEntity, referenceBuilder)
 
 	describe "#canHandle", ->
 
@@ -27,6 +31,15 @@ describe "AutoMapper", ->
 			expect(entity.mismatchedProperty).toBeUndefined()
 
 		describe "when property names and configuration property names match", ->
+			ref1 = ref2 = ref3 = null
+
+			beforeEach ->
+				ref1 = new ReferenceEntityOne "1"
+				ref2 = new ReferenceEntityOne "2"
+				ref3 = new ReferenceEntityTwo "3"
+				container.add ref1
+				container.add ref2
+				container.add ref3
 
 			it "will set basic properties on the entity", ->
 				entity = mapper.handle mocks.datastoreConfig.CollectionParentEntity[0]
@@ -34,58 +47,16 @@ describe "AutoMapper", ->
 
 			it "will set reference properties on the entity", ->
 				entity = mapper.handle mocks.datastoreConfig.CollectionParentEntity[0]
-				ref1 = entity.referenceOne
-				expect(ref1).not.toBeNull()
-				expect(ref1.constructor).toEqual ReferenceProperty
-				expect(ref1.entityClass).toEqual 'ReferenceEntityOne'
-				expect(ref1.entityId).toEqual '1'
-				ref2 = entity.referenceTwo
-				expect(ref2).not.toBeNull()
-				expect(ref2.constructor).toEqual ReferenceProperty
-				expect(ref2.entityClass).toEqual 'ReferenceEntityTwo'
-				expect(ref2.entityId).toEqual '3'
+				expect(entity.referenceOne).toEqual ref1
+				expect(entity.referenceTwo).toEqual ref3
 
 			it "will set collection reference properties on the entity", ->
 				entity = mapper.handle mocks.datastoreConfig.CollectionParentEntity[0]
-				collection = entity.referenceCollection
-				expect(collection[0]).not.toBeNull()
-				expect(collection[0].constructor).toEqual ReferenceProperty
-				expect(collection[0].entityClass).toEqual 'ReferenceEntityOne'
-				expect(collection[0].entityId).toEqual '1'
-				expect(collection[1]).not.toBeNull()
-				expect(collection[1].constructor).toEqual ReferenceProperty
-				expect(collection[1].entityClass).toEqual 'ReferenceEntityOne'
-				expect(collection[1].entityId).toEqual '2'
+				expect(entity.referenceCollection).toEqual [ ref1, ref2 ]
 
-			describe "when a function with the form 'addTo...' exists, where ... is replaced with a title-cased property name", ->
+		describe "when buildEntity() exists on an extension class", ->
 
-				beforeEach ->
-					CollectionParentEntity::addToReferenceCollection = (ref)->
-						@timesCalled = 0 unless @timesCalled?
-						@referenceCollection.push ref
-						@timesCalled += 1
-				
-				afterEach ->
-					delete CollectionParentEntity::addToReferenceCollection
-
-				it "will build a reference collection using addTo... instead of setting the property", ->
-					entity = mapper.handle mocks.datastoreConfig.CollectionParentEntity[0]
-					expect(entity.timesCalled).toEqual 2
-					collection = entity.referenceCollection
-					expect(collection[0]).not.toBeNull()
-					expect(collection[0].constructor).toEqual ReferenceProperty
-					expect(collection[0].entityClass).toEqual 'ReferenceEntityOne'
-					expect(collection[0].entityId).toEqual '1'
-					expect(collection[1]).not.toBeNull()
-					expect(collection[1].constructor).toEqual ReferenceProperty
-					expect(collection[1].entityClass).toEqual 'ReferenceEntityOne'
-					expect(collection[1].entityId).toEqual '2'
-
-		describe "when @buildEntity() exists on an extension class", ->
-
-			it "will call @buildEntity after automapping to allow for custom mapping", ->
-				mapper = new ExtensionMapper()
-				spyOn(mapper, 'buildEntity').andCallThrough()
+			it "will call buildEntity after automapping to allow for custom mapping", ->
+				mapper = new ExtensionMapper(new ReferenceBuilder(container))
 				entity = mapper.handle mocks.datastoreConfig.CollectionParentEntity[0]
-				expect(mapper.buildEntity).toHaveBeenCalled()
 				expect(entity.unConfigged).toEqual 'Customized'
