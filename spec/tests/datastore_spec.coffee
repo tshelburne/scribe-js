@@ -1,46 +1,45 @@
 DataStore = require "scribe/datastore"
-EntityFactory = require "scribe/factory/entity_factory"
+EntityFactory    = require "scribe/factory/entity_factory"
+ReferenceBuilder = require 'scribe/factory/reference_builder'
+EntityContainer  = require 'scribe/repositories/entity_container'
 EntityRepository = require "scribe/repositories/entity_repository"
 
 describe "DataStore", ->
-	datastore = null
-	entityFactory = new EntityFactory([
-		new ReferenceEntityOneMapper(),
-		new ReferenceEntityTwoMapper(),
-		new ParentEntityMapper(),
-		new CollectionParentEntityMapper()
-	])
+	datastore = container = referenceBuilder = factory = null
 
 	beforeEach ->
-		datastore = new DataStore(entityFactory)
+		container = new EntityContainer()
+		referenceBuilder = new ReferenceBuilder(container)
+		factory = new EntityFactory(referenceBuilder, [ ], [ ReferenceEntityOne, ReferenceEntityTwo, ParentEntity, CollectionParentEntity ])
+		datastore = new DataStore(factory, container)
 
 	describe "::create", ->
 
 		it "will create a datastore using the packaged classes in Scribe", ->
-			datastore = DataStore.create([ new ReferenceEntityOneMapper(), new ReferenceEntityTwoMapper() ])
+			datastore = DataStore.create([ ], [ ReferenceEntityOne, ReferenceEntityTwo ])
 			expect(datastore.constructor).toEqual DataStore
 
 	describe "#buildEntity", ->
 
 		it "will build an entity", ->
-			datastore.buildEntity("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne[0], false)
+			datastore.buildEntity("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne[0])
 			entity = datastore.find "ReferenceEntityOne", "1"
 			expect(entity).not.toBeNull()
-			expect(entity instanceof ReferenceEntityOne).toBeTruthy()
+			expect(entity.constructor).toEqual ReferenceEntityOne
 
 		it "will create a repository if one doesn't exist", ->
-			datastore.buildEntity("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne[0], false)
+			datastore.buildEntity("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne[0])
 			expect(datastore.getRepository "ReferenceEntityOne").not.toBeNull()
 
 		it "will add the entity to the repository", ->
-			datastore.buildEntity("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne[0], false)
+			datastore.buildEntity("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne[0])
 			entity = datastore.getRepository("ReferenceEntityOne").find("1")
 			expect(entity).not.toBeNull()
 			expect(entity.propOne).toEqual "valueOne"
 
 		it "will build entity references when buildReferences is true", ->
-			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne, false)
-			datastore.buildEntities("ReferenceEntityTwo", mocks.datastoreConfig.ReferenceEntityTwo, false)
+			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne)
+			datastore.buildEntities("ReferenceEntityTwo", mocks.datastoreConfig.ReferenceEntityTwo)
 			datastore.buildEntities("ParentEntity", mocks.datastoreConfig.ParentEntity)
 			entity = datastore.find("ParentEntity", "4")
 			expect(entity.ReferenceEntityOne).not.toBeNull()
@@ -48,8 +47,8 @@ describe "DataStore", ->
 			expect(entity.referenceTwo.propTwo).toEqual "valueTwo"
 
 		it "will build entity reference collections when buildReferences is true", ->
-			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne, false)
-			datastore.buildEntities("ReferenceEntityTwo", mocks.datastoreConfig.ReferenceEntityTwo, false)
+			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne)
+			datastore.buildEntities("ReferenceEntityTwo", mocks.datastoreConfig.ReferenceEntityTwo)
 			datastore.buildEntities("CollectionParentEntity", mocks.datastoreConfig.CollectionParentEntity)
 			entity = datastore.find("CollectionParentEntity", "5")
 			expect(entity.referenceCollection).not.toEqual []
@@ -60,7 +59,7 @@ describe "DataStore", ->
 	describe "#buildEntities", ->
 
 		it "will build multiple entities", ->
-			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne, false)
+			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne)
 			repo = datastore.getRepository "ReferenceEntityOne"
 			expect(repo).not.toBeNull()
 			expect(repo.entityList.length).toEqual 2
@@ -68,21 +67,22 @@ describe "DataStore", ->
 	describe "#getRepository", ->
 
 		it "will return an entity repository", ->
-			expect(datastore.getRepository "ReferenceEntityOne" instanceof EntityRepository).toBeTruthy()
+			datastore.buildEntity('ReferenceEntityOne', mocks.datastoreConfig.ReferenceEntityOne[0])
+			expect(datastore.getRepository("ReferenceEntityOne").constructor).toEqual EntityRepository
 
 		it "will return the requested repo when it exists", ->
-			datastore.buildEntity('ReferenceEntityOne', mocks.datastoreConfig.ReferenceEntityOne[0], false)
-			expect(datastore.getRepository "ReferenceEntityOne").toEqual datastore.repos[0]
+			datastore.buildEntity('ReferenceEntityOne', mocks.datastoreConfig.ReferenceEntityOne[0])
+			repo = datastore.getRepository("ReferenceEntityOne")
+			expect(repo.entityClass).toEqual ReferenceEntityOne
+			expect(repo.find("1")).not.toBeNull()
 
-		it "will create a repository when one doesn't exist", ->
-			expect(datastore.repos).toEqual [ ]
-			repo = datastore.getRepository "ReferenceEntityOne"
-			expect(datastore.repos).toEqual [ repo ]
+		it "will return null when the requested repo doesn't exist", ->
+			expect(datastore.getRepository "ReferenceEntityOne").toBeNull()
 
 	describe "#find", ->
 
 		it "will return an entity", ->
-			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne, false)
+			datastore.buildEntities("ReferenceEntityOne", mocks.datastoreConfig.ReferenceEntityOne)
 			entity = datastore.find("ReferenceEntityOne", "1")
 			expect(entity).not.toEqual null
 			expect(entity.propOne).toEqual "valueOne"

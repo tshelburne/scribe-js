@@ -6,12 +6,13 @@ class EntityContainer
 		@repositories = []
 
 	add: (entity)-> 
-		repo = @getRepository(entity)
+		repo = @getRepository entity
 		repo = buildNewRepository.call @, entity unless repo?
 		repo.add(entity)
 
 	find: (entityClass, id)-> 
-		return @getRepository(entityClass).find(id) if @getRepository(entityClass)?
+		repository = @getRepository entityClass
+		return repository.find(id) if repository?
 		null
 
 	getRepository: (entityCheck)->

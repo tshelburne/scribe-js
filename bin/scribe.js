@@ -1,18 +1,558 @@
-(function(){var b=window.modules||[],a=null;b.scribe__datastore=function(){if(null===a){var b,d;d=require("scribe/repositories/entity_repository");b=require("scribe/factory/entity_factory");var j=function(e){this.entityFactory=e;this.repos=[]};j.create=function(e){return new this(new b(e))};j.prototype.buildEntity=function(e,h,c){null==c&&(c=!0);this.getRepository(e).add(this.entityFactory.build(e,h));if(c)return this.rebuildReferences()};j.prototype.buildEntities=function(e,h,c){var g,a,d;null==
-c&&(c=!0);a=0;for(d=h.length;a<d;a++)g=h[a],this.buildEntity(e,g,!1);if(c)return this.rebuildReferences()};j.prototype.rebuildReferences=function(){var e,h,c,a,d,b,s,x,t,j,f,p,n,l,m,w,k;w=this.repos;k=[];l=0;for(m=w.length;l<m;l++)n=w[l],0<n.numEntities()&&n.hasReferences()?(e=n.findAll(),k.push(function(){var l,k,u,w,q,m,y;y=[];l=0;for(u=e.length;l<u;l++)if(b=e[l],b.hydrated)y.push(void 0);else{p=0;q=n.metadata.references;k=0;for(w=q.length;k<w;k++)x=q[k],f=b[x],j=this.getRepository(f.entityClass),
-s=null!=j?j.find(f.entityId):null,null!=s&&(p++,b[x]=s);d=0;q=n.metadata.referenceCollections;k=0;for(w=q.length;k<w;k++){c=q[k];a=0;m=b[c];for(t in m)f=m[t],h=this.getRepository(f.entityClass),s=null!=h?h.find(f.entityId):null,null!=s&&(a++,b[c][t]=s);a===b[c].length&&d++}p===n.numReferenceProperties()&&d===n.numReferenceCollections()?y.push(b.hydrated=!0):y.push(void 0)}return y}.call(this))):k.push(void 0);return k};j.prototype.getRepository=function(e){var a,c,g,b;b=this.repos;c=0;for(g=b.length;c<
-g;c++)if(a=b[c],a.canHandle(e))return a;e=new d(e);this.repos.push(e);return e};j.prototype.find=function(e,a){return this.getRepository(e).find(a)};a=j}return a};window.modules=b})();
-(function(){var b=window.modules||[],a=null;b.scribe__factory__auto_mapper=function(){if(null===a){var b;b=require("scribe/references/reference_property");var d=function(e){this.entityClass=e},j,e,h,c,g,A,r;d.prototype.canHandle=function(e){return e===this.entityClass.name};d.prototype.handle=function(e){var a;a=A.call(this,e);null!=this.buildEntity&&this.buildEntity(e,a);return a};A=function(a){var b,d,f;b=new this.entityClass(a.id);for(d in a)f=a[d],h(b,d)&&(g(f)?b[d]=j(f):c(f)?e(b,d,f):b[d]=f);
-return b};h=function(a,e){return e in a&&!(a[e]instanceof Function)};g=function(a){return a instanceof Object&&"class"in a&&"id"in a&&!(a.id instanceof Array)};c=function(a){return a instanceof Object&&"class"in a&&("ids"in a||"id"in a&&a.id instanceof Array)};j=function(a){return new b(a["class"],a.id)};e=function(a,e,b){var c,d,h,g,f;c=r(e);d=b["class"];b="id"in b?b.id:b.ids;if(null!=a["addTo"+c]){f=[];e=0;for(g=b.length;e<g;e++)h=b[e],h=j({"class":d,id:h}),f.push(a["addTo"+c](h));return f}f=[];
-c=0;for(g=b.length;c<g;c++)h=b[c],f.push(j({"class":d,id:h}));return a[e]=f};r=function(a){return""+a.charAt(0).toUpperCase()+a.slice(1)};a=d}return a};window.modules=b})();(function(){var b=window.modules||[],a=null;b.scribe__factory__entity_factory=function(){if(null===a){var b=function(a){this.mappers=a};b.prototype.build=function(a,b){var e,h,c,g;g=this.mappers;h=0;for(c=g.length;h<c;h++)if(e=g[h],e.canHandle(a))return e.handle(b);return null};a=b}return a};window.modules=b})();
-(function(){var b=window.modules||[],a=null;b.scribe__factory__entity_mapper=function(){if(null===a){var b=function(){this.entityClass=null};b.prototype.canHandle=function(a){return a===this.entityClass};b.prototype.handle=function(a){return this.buildEntity(a)};b.prototype.buildEntity=function(){return console.log("You must override the buildEntity() function to create a data mapper.")};a=b}return a};window.modules=b})();
-(function(){var b=window.modules||[],a=null;b.scribe__references__reference_builder=function(){if(null===a){var b=function(){};b.prototype.rebuildReferences=function(){var a,b,e,h,c,g,f,r,s,x,t,z,v,p,n,l,m;l=this.repos;m=[];p=0;for(n=l.length;p<n;p++)v=l[p],0<v.numEntities()&&v.hasReferences()?(a=v.findAll(),m.push(function(){var l,k,n,m,u,p,q;q=[];l=0;for(n=a.length;l<n;l++)if(g=a[l],g.hydrated)q.push(void 0);else{z=0;u=v.metadata.references;k=0;for(m=u.length;k<m;k++)r=u[k],t=g[r],x=this.getRepository(t.entityType),
-f=null!=x?x.find(t.entityId):null,null!=f&&(z++,g[r]=f);c=0;u=v.metadata.referenceCollections;k=0;for(m=u.length;k<m;k++){e=u[k];h=0;p=g[e];for(s in p)t=p[s],b=this.getRepository(t.entityType),f=null!=b?b.find(t.entityId):null,null!=f&&(h++,g[e][s]=f);h===g[e].length&&c++}z===v.numReferenceProperties()&&c===v.numReferenceCollections()?q.push(g.hydrated=!0):q.push(void 0)}return q}.call(this))):m.push(void 0);return m};a=b}return a};window.modules=b})();
-(function(){var b=window.modules||[],a=null;b.scribe__references__reference_property=function(){null===a&&(a=function(a,b){this.entityClass=a;this.entityId=b});return a};window.modules=b})();
-(function(){var b=window.modules||[],a=null;b.scribe__repositories__entity_metadata=function(){if(null===a){var b;b=require("scribe/references/reference_property");var d=function(){this.klass=null;this.properties=[];this.references=[];this.referenceCollections=[]},j;d.prototype.buildFromInstance=function(a){var b,c,g;this.klass=a.constructor;g=[];for(b in a)c=a[b],c instanceof Array&&0<c.length&&j(c[0])?g.push(this.referenceCollections.push(b)):j(c)?g.push(this.references.push(b)):g.push(this.properties.push(b));
-return g};d.prototype.hasReferences=function(){return null!==this.klass?0<this.references.length||0<this.referenceCollections.length:null};j=function(a){return a instanceof b};a=d}return a};window.modules=b})();
-(function(){var b=window.modules||[],a=null;b.scribe__repositories__entity_repository=function(){if(null===a){var b;b=require("scribe/repositories/entity_metadata");var d=function(){this.entityList=[];this.metadata=new b},j;d.prototype.canHandle=function(a){return null===this.metadata.klass?!1:this.metadata.klass===a||this.metadata.klass.name===a||a.constructor===this.metadata.klass};d.prototype.add=function(a){null===this.metadata.klass&&this.metadata.buildFromInstance(a);return this.entityList.push(a)};
-d.prototype.remove=function(a){return this.entityList.splice(this.entityList.indexOf(a),1)};d.prototype.find=function(a){var b,c,g,d;d=this.entityList;c=0;for(g=d.length;c<g;c++)if(b=d[c],b.id===a)return b;return null};d.prototype.findAll=function(){return this.entityList};d.prototype.findBy=function(a){var b,c,d,f,r;f=this.entityList;r=[];c=0;for(d=f.length;c<d;c++)b=f[c],j(b,a)&&r.push(b);return r};d.prototype.findOneBy=function(a){var b,c,d,f;f=this.entityList;c=0;for(d=f.length;c<d;c++)if(b=f[c],
-j(b,a))return b;return null};d.prototype.numEntities=function(){return this.entityList.length};d.prototype.hasReferences=function(){return this.metadata.hasReferences()};d.prototype.numReferenceProperties=function(){return null!==this.metadata.klass?this.metadata.references.length:null};d.prototype.numReferenceCollections=function(){return null!==this.metadata.klass?this.metadata.referenceCollections.length:null};j=function(a,b){var c,d;for(c in b)if(d=b[c],a[c]!==d)return!1;return!0};a=d}return a};
-window.modules=b})();(function(){var b=window.modules||[];window.require=function(a){a=a.replace(/\//g,"__");-1===a.indexOf("__")&&(a="__"+a);return null===b[a]?null:b[a]()}})();
 
+(function() {
+  var modules = window.modules || [];
+  var datastoreCache = null;
+  var datastoreFunc = function() {
+    return (function() {
+  var DataStore, EntityContainer, EntityFactory, ReferenceBuilder;
+
+  EntityContainer = require("scribe/repositories/entity_container");
+
+  EntityFactory = require("scribe/factory/entity_factory");
+
+  ReferenceBuilder = require('scribe/factory/reference_builder');
+
+  DataStore = (function() {
+    function DataStore(entityFactory, entityContainer) {
+      this.entityFactory = entityFactory;
+      this.entityContainer = entityContainer;
+    }
+
+    DataStore.create = function(customMappers, automappableClasses) {
+      var container, factory;
+
+      if (automappableClasses == null) {
+        automappableClasses = [];
+      }
+      container = new EntityContainer();
+      factory = new EntityFactory(new ReferenceBuilder(container), customMappers, automappableClasses);
+      return new this(factory, container);
+    };
+
+    DataStore.prototype.buildEntity = function(entityClass, entityConfig) {
+      return this.entityContainer.add(this.entityFactory.build(entityClass, entityConfig));
+    };
+
+    DataStore.prototype.buildEntities = function(entityClass, entityConfigs) {
+      var config, _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = entityConfigs.length; _i < _len; _i++) {
+        config = entityConfigs[_i];
+        _results.push(this.buildEntity(entityClass, config));
+      }
+      return _results;
+    };
+
+    DataStore.prototype.getRepository = function(entityClass) {
+      return this.entityContainer.getRepository(entityClass);
+    };
+
+    DataStore.prototype.find = function(entityClass, id) {
+      return this.entityContainer.find(entityClass, id);
+    };
+
+    return DataStore;
+
+  })();
+
+  return DataStore;
+
+}).call(this);
+
+  };
+  modules.scribe__datastore = function() {
+    if (datastoreCache === null) {
+      datastoreCache = datastoreFunc();
+    }
+    return datastoreCache;
+  };
+  window.modules = modules;
+})();
+
+(function() {
+  var modules = window.modules || [];
+  var auto_mapperCache = null;
+  var auto_mapperFunc = function() {
+    return (function() {
+  var AutoMapper;
+
+  AutoMapper = (function() {
+    var hasProperty, isReferenceCollectionProperty, isReferenceProperty, map;
+
+    function AutoMapper(entityClass, referenceBuilder) {
+      this.entityClass = entityClass;
+      this.referenceBuilder = referenceBuilder != null ? referenceBuilder : null;
+    }
+
+    AutoMapper.prototype.canHandle = function(entityClass) {
+      return entityClass === this.entityClass.name;
+    };
+
+    AutoMapper.prototype.handle = function(config) {
+      var entity;
+
+      entity = map.call(this, config);
+      if (typeof this.buildEntity === "function") {
+        this.buildEntity(config, entity);
+      }
+      this.referenceBuilder.hydrateReferencesFor(entity);
+      return entity;
+    };
+
+    map = function(config) {
+      var entity, prop, refIds, value;
+
+      entity = new this.entityClass(config.id);
+      for (prop in config) {
+        value = config[prop];
+        if (hasProperty(entity, prop)) {
+          if (isReferenceProperty(value)) {
+            this.referenceBuilder.createReference(entity, prop, value["class"], value.id);
+          } else if (isReferenceCollectionProperty(value)) {
+            refIds = 'id' in value ? value.id : value.ids;
+            this.referenceBuilder.createReferenceCollection(entity, prop, value["class"], refIds);
+          } else {
+            entity[prop] = value;
+          }
+        }
+      }
+      return entity;
+    };
+
+    hasProperty = function(entity, prop) {
+      return prop in entity && !(entity[prop] instanceof Function);
+    };
+
+    isReferenceProperty = function(value) {
+      return value instanceof Object && 'class' in value && 'id' in value && !(value.id instanceof Array);
+    };
+
+    isReferenceCollectionProperty = function(value) {
+      return value instanceof Object && 'class' in value && ('ids' in value || ('id' in value && value.id instanceof Array));
+    };
+
+    return AutoMapper;
+
+  })();
+
+  return AutoMapper;
+
+}).call(this);
+
+  };
+  modules.scribe__factory__auto_mapper = function() {
+    if (auto_mapperCache === null) {
+      auto_mapperCache = auto_mapperFunc();
+    }
+    return auto_mapperCache;
+  };
+  window.modules = modules;
+})();
+
+(function() {
+  var modules = window.modules || [];
+  var entity_factoryCache = null;
+  var entity_factoryFunc = function() {
+    return (function() {
+  var AutoMapper, EntityFactory;
+
+  AutoMapper = require('scribe/factory/auto_mapper');
+
+  EntityFactory = (function() {
+    var shouldHaveReferenceBuilder;
+
+    function EntityFactory(referenceBuilder, customMappers, automappableClasses) {
+      var entityClass, mapper, _i, _j, _len, _len1;
+
+      this.referenceBuilder = referenceBuilder;
+      if (automappableClasses == null) {
+        automappableClasses = [];
+      }
+      for (_i = 0, _len = customMappers.length; _i < _len; _i++) {
+        mapper = customMappers[_i];
+        if (shouldHaveReferenceBuilder(mapper)) {
+          mapper.referenceBuilder = this.referenceBuilder;
+        }
+      }
+      this.mappers = customMappers;
+      for (_j = 0, _len1 = automappableClasses.length; _j < _len1; _j++) {
+        entityClass = automappableClasses[_j];
+        this.mappers.push(new AutoMapper(entityClass, this.referenceBuilder));
+      }
+    }
+
+    EntityFactory.prototype.build = function(entityClass, config) {
+      var mapper, _i, _len, _ref;
+
+      _ref = this.mappers;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        mapper = _ref[_i];
+        if (mapper.canHandle(entityClass)) {
+          return mapper.handle(config);
+        }
+      }
+      return null;
+    };
+
+    shouldHaveReferenceBuilder = function(mapper) {
+      return mapper instanceof AutoMapper && (mapper.referenceBuilder == null);
+    };
+
+    return EntityFactory;
+
+  })();
+
+  return EntityFactory;
+
+}).call(this);
+
+  };
+  modules.scribe__factory__entity_factory = function() {
+    if (entity_factoryCache === null) {
+      entity_factoryCache = entity_factoryFunc();
+    }
+    return entity_factoryCache;
+  };
+  window.modules = modules;
+})();
+
+(function() {
+  var modules = window.modules || [];
+  var reference_builderCache = null;
+  var reference_builderFunc = function() {
+    return (function() {
+  var ReferenceBuilder;
+
+  ReferenceBuilder = (function() {
+    var PendingReference, addReferenceToCollection, createPendingReference, findPendingReferences, findReference, referenceMatches, removePendingReference, setReference, toCapitalCase;
+
+    function ReferenceBuilder(entityContainer) {
+      this.entityContainer = entityContainer;
+      this.pendingReferences = [];
+    }
+
+    ReferenceBuilder.prototype.createReference = function(entity, prop, refClass, refId) {
+      var reference;
+
+      reference = findReference.call(this, refClass, refId);
+      if (reference != null) {
+        return entity[prop] = reference;
+      } else {
+        return createPendingReference.call(this, entity, prop, refClass, refId);
+      }
+    };
+
+    ReferenceBuilder.prototype.createReferenceCollection = function(entity, prop, refClass, refIds) {
+      var refId, reference, _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = refIds.length; _i < _len; _i++) {
+        refId = refIds[_i];
+        reference = findReference.call(this, refClass, refId);
+        if (reference != null) {
+          _results.push(addReferenceToCollection(entity, prop, reference));
+        } else {
+          _results.push(createPendingReference.call(this, entity, prop, refClass, refId, true));
+        }
+      }
+      return _results;
+    };
+
+    ReferenceBuilder.prototype.hydrateReferencesFor = function(entity) {
+      var applicablePendingReferences, pendingReference, _i, _len, _results;
+
+      applicablePendingReferences = findPendingReferences.call(this, entity.constructor.name, entity.id);
+      _results = [];
+      for (_i = 0, _len = applicablePendingReferences.length; _i < _len; _i++) {
+        pendingReference = applicablePendingReferences[_i];
+        setReference(pendingReference, entity);
+        _results.push(removePendingReference.call(this, pendingReference));
+      }
+      return _results;
+    };
+
+    findReference = function(refClass, refId) {
+      var _ref;
+
+      return (_ref = this.entityContainer.getRepository(refClass)) != null ? _ref.find(refId) : void 0;
+    };
+
+    createPendingReference = function(entity, prop, refClass, refId, isCollection) {
+      if (isCollection == null) {
+        isCollection = false;
+      }
+      return this.pendingReferences.push(new PendingReference(entity, prop, refClass, refId, isCollection));
+    };
+
+    findPendingReferences = function(refClass, refId) {
+      var pendingReference, _i, _len, _ref, _results;
+
+      _ref = this.pendingReferences;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        pendingReference = _ref[_i];
+        if (referenceMatches(pendingReference, refClass, refId)) {
+          _results.push(pendingReference);
+        }
+      }
+      return _results;
+    };
+
+    removePendingReference = function(pendingReference) {
+      return this.pendingReferences.splice(this.pendingReferences.indexOf(pendingReference), 1);
+    };
+
+    referenceMatches = function(pendingReference, refClass, refId) {
+      return pendingReference.refClass === refClass && pendingReference.refId === refId;
+    };
+
+    setReference = function(pendingReference, reference) {
+      if (pendingReference.partOfCollection) {
+        return addReferenceToCollection(pendingReference.entity, pendingReference.prop, reference);
+      } else {
+        return pendingReference.entity[pendingReference.prop] = reference;
+      }
+    };
+
+    addReferenceToCollection = function(entity, prop, reference) {
+      var capitalProp;
+
+      capitalProp = toCapitalCase(prop);
+      if (entity["addTo" + capitalProp] != null) {
+        return entity["addTo" + capitalProp](reference);
+      } else {
+        return entity[prop].push(reference);
+      }
+    };
+
+    toCapitalCase = function(string) {
+      return "" + (string.charAt(0).toUpperCase()) + (string.slice(1));
+    };
+
+    PendingReference = (function() {
+      function PendingReference(entity, prop, refClass, refId, partOfCollection) {
+        this.entity = entity;
+        this.prop = prop;
+        this.refClass = refClass;
+        this.refId = refId;
+        this.partOfCollection = partOfCollection != null ? partOfCollection : false;
+      }
+
+      return PendingReference;
+
+    })();
+
+    return ReferenceBuilder;
+
+  })();
+
+  return ReferenceBuilder;
+
+}).call(this);
+
+  };
+  modules.scribe__factory__reference_builder = function() {
+    if (reference_builderCache === null) {
+      reference_builderCache = reference_builderFunc();
+    }
+    return reference_builderCache;
+  };
+  window.modules = modules;
+})();
+
+(function() {
+  var modules = window.modules || [];
+  var entity_containerCache = null;
+  var entity_containerFunc = function() {
+    return (function() {
+  var EntityContainer, EntityRepository;
+
+  EntityRepository = require('scribe/repositories/entity_repository');
+
+  EntityContainer = (function() {
+    var buildNewRepository;
+
+    function EntityContainer() {
+      this.repositories = [];
+    }
+
+    EntityContainer.prototype.add = function(entity) {
+      var repo;
+
+      repo = this.getRepository(entity);
+      if (repo == null) {
+        repo = buildNewRepository.call(this, entity);
+      }
+      return repo.add(entity);
+    };
+
+    EntityContainer.prototype.find = function(entityClass, id) {
+      var repository;
+
+      repository = this.getRepository(entityClass);
+      if (repository != null) {
+        return repository.find(id);
+      }
+      return null;
+    };
+
+    EntityContainer.prototype.getRepository = function(entityCheck) {
+      var repository, _i, _len, _ref;
+
+      _ref = this.repositories;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repository = _ref[_i];
+        if (repository.canHandle(entityCheck)) {
+          return repository;
+        }
+      }
+      return null;
+    };
+
+    buildNewRepository = function(entity) {
+      var newRepository;
+
+      newRepository = new EntityRepository(entity.constructor);
+      this.repositories.push(newRepository);
+      return newRepository;
+    };
+
+    return EntityContainer;
+
+  })();
+
+  return EntityContainer;
+
+}).call(this);
+
+  };
+  modules.scribe__repositories__entity_container = function() {
+    if (entity_containerCache === null) {
+      entity_containerCache = entity_containerFunc();
+    }
+    return entity_containerCache;
+  };
+  window.modules = modules;
+})();
+
+(function() {
+  var modules = window.modules || [];
+  var entity_repositoryCache = null;
+  var entity_repositoryFunc = function() {
+    return (function() {
+  var EntityRepository;
+
+  EntityRepository = (function() {
+    var isMatch;
+
+    function EntityRepository(entityClass) {
+      this.entityClass = entityClass;
+      this.entityList = [];
+    }
+
+    EntityRepository.prototype.canHandle = function(entityCheck) {
+      return this.entityClass === entityCheck || this.entityClass.name === entityCheck || entityCheck.constructor === this.entityClass;
+    };
+
+    EntityRepository.prototype.add = function(entity) {
+      return this.entityList.push(entity);
+    };
+
+    EntityRepository.prototype.remove = function(entity) {
+      return this.entityList.splice(this.entityList.indexOf(entity), 1);
+    };
+
+    EntityRepository.prototype.find = function(id) {
+      var entity, _i, _len, _ref;
+
+      _ref = this.entityList;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        entity = _ref[_i];
+        if (entity.id === id) {
+          return entity;
+        }
+      }
+      return null;
+    };
+
+    EntityRepository.prototype.findAll = function() {
+      return this.entityList;
+    };
+
+    EntityRepository.prototype.findBy = function(criteria) {
+      var entity, _i, _len, _ref, _results;
+
+      _ref = this.entityList;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        entity = _ref[_i];
+        if (isMatch(entity, criteria)) {
+          _results.push(entity);
+        }
+      }
+      return _results;
+    };
+
+    EntityRepository.prototype.findOneBy = function(criteria) {
+      var entity, _i, _len, _ref;
+
+      _ref = this.entityList;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        entity = _ref[_i];
+        if (isMatch(entity, criteria)) {
+          return entity;
+        }
+      }
+      return null;
+    };
+
+    EntityRepository.prototype.numEntities = function() {
+      return this.entityList.length;
+    };
+
+    isMatch = function(entity, criteria) {
+      var prop, value;
+
+      for (prop in criteria) {
+        value = criteria[prop];
+        if (entity[prop] !== value) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    return EntityRepository;
+
+  })();
+
+  return EntityRepository;
+
+}).call(this);
+
+  };
+  modules.scribe__repositories__entity_repository = function() {
+    if (entity_repositoryCache === null) {
+      entity_repositoryCache = entity_repositoryFunc();
+    }
+    return entity_repositoryCache;
+  };
+  window.modules = modules;
+})();
+
+(function() {
+  var modules = window.modules || [];
+  window.require = function(path) {
+    var transformedPath = path.replace(/\//g, '__');
+    if (transformedPath.indexOf('__') === -1) {
+      transformedPath = '__' + transformedPath;
+    }
+    var factory = modules[transformedPath];
+    if (factory === null) {
+      return null;
+    } else {
+      return modules[transformedPath]();
+    }
+  };
+})();
