@@ -8,10 +8,8 @@ Rakefile
 assets/scripts/coffee/scribe/datastore.coffee
 assets/scripts/coffee/scribe/factory/auto_mapper.coffee
 assets/scripts/coffee/scribe/factory/entity_factory.coffee
-assets/scripts/coffee/scribe/factory/entity_mapper.coffee
-assets/scripts/coffee/scribe/references/reference_builder.coffee
-assets/scripts/coffee/scribe/references/reference_property.coffee
-assets/scripts/coffee/scribe/repositories/entity_metadata.coffee
+assets/scripts/coffee/scribe/factory/reference_builder.coffee
+assets/scripts/coffee/scribe/repositories/entity_container.coffee
 assets/scripts/coffee/scribe/repositories/entity_repository.coffee
 bin/scribe.js
 config/assets.rb
@@ -28,5 +26,7 @@ spec/support/objects.coffee
 spec/support/requirements.coffee
 spec/tests/datastore_spec.coffee
 spec/tests/factory/auto_mapper_spec.coffee
-spec/tests/repositories/entity_metadata_spec.coffee
+spec/tests/factory/entity_factory_spec.coffee
+spec/tests/factory/reference_builder_spec.coffee
+spec/tests/repositories/entity_container_spec.coffee
 spec/tests/repositories/entity_repository_spec.coffee
