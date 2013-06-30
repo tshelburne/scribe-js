@@ -17,6 +17,8 @@ class EntityContainer
 	getRepository: (entityCheck)->
 		return repository for repository in @repositories when repository.canHandle entityCheck
 		null
+
+	# PRIVATE
 		
 	buildNewRepository = (entity)->
 		newRepository = new EntityRepository(entity.constructor)

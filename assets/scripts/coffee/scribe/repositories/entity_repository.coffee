@@ -1,5 +1,3 @@
-EntityMetadata = require "scribe/repositories/entity_metadata"
-
 #
 # @author - Tim Shelburne <tim@musiconelive.com>
 #
@@ -7,17 +5,13 @@ EntityMetadata = require "scribe/repositories/entity_metadata"
 #
 class EntityRepository
 
-  constructor: ->
+  constructor: (@entityClass)->
     @entityList = []
-    @metadata = new EntityMetadata()
 
-  canHandle: (entityCheck)-> 
-    return false unless metadataHasBeenBuilt.call @
-    @metadata.klass is entityCheck or @metadata.klass.name is entityCheck or entityCheck.constructor is @metadata.klass
+  canHandle: (entityCheck)->
+    @entityClass is entityCheck or @entityClass.name is entityCheck or entityCheck.constructor is @entityClass
 
-  add: (entity)->
-    @metadata.buildFromInstance(entity) unless metadataHasBeenBuilt.call @
-    @entityList.push entity
+  add: (entity)-> @entityList.push entity
 
   remove: (entity)-> @entityList.splice @entityList.indexOf(entity), 1
 
@@ -35,17 +29,10 @@ class EntityRepository
 
   numEntities: -> @entityList.length
 
-  hasReferences: -> @metadata.hasReferences()
-
-  numReferenceProperties: -> if metadataHasBeenBuilt.call @ then @metadata.references.length else null
-
-  numReferenceCollections: -> if metadataHasBeenBuilt.call @ then @metadata.referenceCollections.length else null
+  # PRIVATE
 
   isMatch = (entity, criteria)->
     return false for prop, value of criteria when entity[prop] isnt value
     true
-
-  metadataHasBeenBuilt = ->
-    @metadata.klass isnt null
-
+    
 return EntityRepository
