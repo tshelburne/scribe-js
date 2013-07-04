@@ -19,7 +19,7 @@ class ReferenceBuilder
 			if reference? then addReferenceToCollection entity, prop, reference else createPendingReference.call @, entity, prop, refClass, refId, true
 
 	hydrateReferencesFor: (entity)-> 
-		applicablePendingReferences = findPendingReferences.call @, entity.constructor.name, entity.id
+		applicablePendingReferences = findPendingReferences.call @, entity
 		for pendingReference in applicablePendingReferences
 			setReference pendingReference, entity
 			removePendingReference.call @, pendingReference
@@ -30,11 +30,11 @@ class ReferenceBuilder
 
 	createPendingReference = (entity, prop, refClass, refId, isCollection=false)-> @pendingReferences.push new PendingReference(entity, prop, refClass, refId, isCollection)
 
-	findPendingReferences = (refClass, refId)-> (pendingReference for pendingReference in @pendingReferences when referenceMatches pendingReference, refClass, refId)
+	findPendingReferences = (reference)-> (pendingReference for pendingReference in @pendingReferences when referenceMatches pendingReference, reference)
 
 	removePendingReference = (pendingReference)-> @pendingReferences.splice @pendingReferences.indexOf(pendingReference), 1
 
-	referenceMatches = (pendingReference, refClass, refId)-> pendingReference.refClass is refClass and pendingReference.refId is refId
+	referenceMatches = (pendingReference, reference)-> pendingReference.refClass is getConstructorName(reference) and pendingReference.refId is reference.id
 		
 	setReference = (pendingReference, reference)->
 		if pendingReference.partOfCollection
@@ -51,6 +51,10 @@ class ReferenceBuilder
 
 	toCapitalCase = (string)-> "#{string.charAt(0).toUpperCase()}#{string.slice(1)}"
 
+	getConstructorName = (entity)->
+		funcNameRegex = /function (.{1,})\(/;
+		results = (funcNameRegex).exec(entity.constructor.toString());
+		if (results? and results.length > 1) then results[1] else ""
 
 	class PendingReference
 
