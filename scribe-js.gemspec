@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = "scribe-js"
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Shelburne"]
-  s.date = "2013-06-30"
+  s.date = "2013-07-04"
   s.description = ""
   s.email = "shelburt02@gmail.com"
   s.executables = ["scribe.js"]

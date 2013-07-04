@@ -1,3 +1,5 @@
+v0.0.4 updated to use constructor names in a cross-browser compliant way
+
 v0.0.3 removed reference building from datastore, added into factory and mapping
 
 v0.0.2 added automapping to the factory
