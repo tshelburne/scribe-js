@@ -35,3 +35,9 @@ Keystone::RakeTask.new :assets do |t|
   t.config_file = "config/assets.rb"
   t.output_path = 'bin'
 end
+
+desc "Build binaries"
+task :binaries do |t|
+	Rake::Task['assets'].invoke
+	`gzip -c bin/hoarder.min.js > bin/hoarder.min.js.gz`
+end
