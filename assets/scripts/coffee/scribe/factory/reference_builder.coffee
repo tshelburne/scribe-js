@@ -1,3 +1,5 @@
+EntityConstructorMap = require 'scribe/repositories/entity_constructor_map'
+
 #
 # @author - Tim Shelburne <tim@musiconelive.com>
 #
@@ -34,7 +36,7 @@ class ReferenceBuilder
 
 	removePendingReference = (pendingReference)-> @pendingReferences.splice @pendingReferences.indexOf(pendingReference), 1
 
-	referenceMatches = (pendingReference, reference)-> pendingReference.refClass is getConstructorName(reference) and pendingReference.refId is reference.id
+	referenceMatches = (pendingReference, reference)-> EntityConstructorMap.match(pendingReference.refClass, reference.constructor) and pendingReference.refId is reference.id
 		
 	setReference = (pendingReference, reference)->
 		if pendingReference.partOfCollection
@@ -50,11 +52,6 @@ class ReferenceBuilder
 			entity[prop].push reference
 
 	toCapitalCase = (string)-> "#{string.charAt(0).toUpperCase()}#{string.slice(1)}"
-
-	getConstructorName = (entity)->
-		funcNameRegex = /function (.{1,})\(/;
-		results = (funcNameRegex).exec(entity.constructor.toString());
-		if (results? and results.length > 1) then results[1] else ""
 
 	class PendingReference
 
