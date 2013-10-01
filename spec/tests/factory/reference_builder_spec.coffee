@@ -10,7 +10,7 @@ describe "ReferenceBuilder", ->
 		builder = new ReferenceBuilder(container)
 
 	afterEach ->
-		EntityConstructorMap.ctors = []
+		EntityConstructorMap.ctors = {}
 
 	describe "#createReference", ->
 

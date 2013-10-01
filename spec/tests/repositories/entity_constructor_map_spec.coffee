@@ -7,7 +7,7 @@ describe "EntityConstructorMap", ->
 		EntityConstructorMap.link "ref1", ReferenceEntityOne
 
 	afterEach ->
-		EntityConstructorMap.ctors = []
+		EntityConstructorMap.ctors = {}
 
 	describe "::link", ->
 

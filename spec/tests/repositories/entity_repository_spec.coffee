@@ -14,7 +14,7 @@ describe "EntityRepository", ->
 		repo = new EntityRepository(ReferenceEntityOne)
 
 	afterEach ->
-		EntityConstructorMap.ctors = []
+		EntityConstructorMap.ctors = {}
 
 	describe "#canHandle", ->
 
