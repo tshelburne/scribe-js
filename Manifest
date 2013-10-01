@@ -9,9 +9,11 @@ assets/scripts/coffee/scribe/datastore.coffee
 assets/scripts/coffee/scribe/factory/auto_mapper.coffee
 assets/scripts/coffee/scribe/factory/entity_factory.coffee
 assets/scripts/coffee/scribe/factory/reference_builder.coffee
+assets/scripts/coffee/scribe/repositories/entity_constructor_map.coffee
 assets/scripts/coffee/scribe/repositories/entity_container.coffee
 assets/scripts/coffee/scribe/repositories/entity_repository.coffee
-bin/scribe.js
+bin/scribe.min.js
+bin/scribe.min.js.gz
 config/assets.rb
 lib/scribe.rb
 lib/scribe/symbols.rb
@@ -28,5 +30,6 @@ spec/tests/datastore_spec.coffee
 spec/tests/factory/auto_mapper_spec.coffee
 spec/tests/factory/entity_factory_spec.coffee
 spec/tests/factory/reference_builder_spec.coffee
+spec/tests/repositories/entity_constructor_map_spec.coffee
 spec/tests/repositories/entity_container_spec.coffee
 spec/tests/repositories/entity_repository_spec.coffee

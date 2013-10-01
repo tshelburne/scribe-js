@@ -39,5 +39,5 @@ end
 desc "Build binaries"
 task :binaries do |t|
 	Rake::Task['assets'].invoke
-	`gzip -c bin/hoarder.min.js > bin/hoarder.min.js.gz`
+	`gzip -c bin/scribe.min.js > bin/scribe.min.js.gz`
 end
