@@ -1,5 +1,6 @@
 ReferenceBuilder = require 'scribe/factory/reference_builder'
 EntityContainer = require 'scribe/repositories/entity_container'
+EntityConstructorMap = require 'scribe/repositories/entity_constructor_map'
 
 describe "ReferenceBuilder", ->
 	builder = container = null
@@ -7,6 +8,9 @@ describe "ReferenceBuilder", ->
 	beforeEach ->
 		container = new EntityContainer()
 		builder = new ReferenceBuilder(container)
+
+	afterEach ->
+		EntityConstructorMap.ctors = []
 
 	describe "#createReference", ->
 

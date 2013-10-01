@@ -6,6 +6,9 @@ describe "EntityConstructorMap", ->
 	beforeEach ->
 		EntityConstructorMap.link "ref1", ReferenceEntityOne
 
+	afterEach ->
+		EntityConstructorMap.ctors = []
+
 	describe "::link", ->
 
 		it "will add the pair to the list of linked constructors", ->
