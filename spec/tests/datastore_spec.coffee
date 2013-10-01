@@ -1,4 +1,5 @@
 DataStore = require "scribe/datastore"
+EntityConstructorMap = require 'scribe/repositories/entity_constructor_map'
 EntityFactory    = require "scribe/factory/entity_factory"
 ReferenceBuilder = require 'scribe/factory/reference_builder'
 EntityContainer  = require 'scribe/repositories/entity_container'
@@ -13,11 +14,30 @@ describe "DataStore", ->
 		factory = new EntityFactory(referenceBuilder, [ ], [ ReferenceEntityOne, ReferenceEntityTwo, ParentEntity, CollectionParentEntity ])
 		datastore = new DataStore(factory, container)
 
+	afterEach ->
+		EntityConstructorMap.ctors = {}
+
 	describe "::create", ->
 
+		beforeEach ->
+			constructorMap = { "ref1": ReferenceEntityOne, "ref2": ReferenceEntityTwo }
+			datastore = DataStore.create([ ], [ ReferenceEntityOne, ReferenceEntityTwo ], constructorMap)
+
 		it "will create a datastore using the packaged classes in Scribe", ->
-			datastore = DataStore.create([ ], [ ReferenceEntityOne, ReferenceEntityTwo ])
 			expect(datastore.constructor).toEqual DataStore
+
+		it "will register all links in a passed constructor map", ->
+			datastore.buildEntity("ref1", mocks.datastoreConfig.ReferenceEntityOne[0])
+			datastore.buildEntity("ref2", mocks.datastoreConfig.ReferenceEntityTwo[0])
+			expect(datastore.getRepository(ReferenceEntityOne).find("1")).not.toBeNull()
+			expect(datastore.getRepository(ReferenceEntityTwo).find("3")).not.toBeNull()
+
+	describe "#registerConstructor", ->
+
+		it "will register a link in the constructor map", ->
+			datastore.registerConstructor "ref1", ReferenceEntityOne
+			datastore.buildEntity("ref1", mocks.datastoreConfig.ReferenceEntityOne[0])
+			expect(datastore.getRepository(ReferenceEntityOne).find("1")).not.toBeNull()
 
 	describe "#buildEntity", ->
 

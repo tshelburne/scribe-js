@@ -1,3 +1,4 @@
+EntityConstructorMap = require 'scribe/repositories/entity_constructor_map'
 EntityContainer = require "scribe/repositories/entity_container"
 EntityFactory = require "scribe/factory/entity_factory"
 ReferenceBuilder = require 'scribe/factory/reference_builder'
@@ -11,10 +12,14 @@ class DataStore
 
   constructor: (@entityFactory, @entityContainer)->
     
-  @create: (customMappers, automappableClasses=[])->
+  @create: (customMappers, automappableClasses=[], constructorMap={})->
     container = new EntityContainer()
     factory = new EntityFactory(new ReferenceBuilder(container), customMappers, automappableClasses)
-    new @(factory, container)
+    datastore = new @(factory, container)
+    datastore.registerConstructor ctorName, ctor for ctorName, ctor of constructorMap
+    datastore
+
+  registerConstructor: (ctorName, ctor)-> EntityConstructorMap.link ctorName, ctor
 
   buildEntity: (entityClass, entityConfig)-> @entityContainer.add(@entityFactory.build(entityClass, entityConfig))
 

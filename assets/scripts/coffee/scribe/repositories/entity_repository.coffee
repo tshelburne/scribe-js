@@ -1,3 +1,4 @@
+EntityConstructorMap = require 'scribe/repositories/entity_constructor_map'
 #
 # @author - Tim Shelburne <tim@musiconelive.com>
 #
@@ -6,11 +7,10 @@
 class EntityRepository
 
   constructor: (@entityClass)->
-    @entityClassName = getClassName @entityClass
     @entityList = []
 
   canHandle: (entityCheck)->
-    @entityClass is entityCheck or @entityClassName is entityCheck or entityCheck.constructor is @entityClass
+    @entityClass is entityCheck or EntityConstructorMap.match(entityCheck, @entityClass) or entityCheck.constructor is @entityClass
 
   add: (entity)-> @entityList.push entity
 
@@ -35,10 +35,5 @@ class EntityRepository
   isMatch = (entity, criteria)->
     return false for prop, value of criteria when entity[prop] isnt value
     true
-
-  getClassName = (entityClass)->
-    funcNameRegex = /function (.{1,})\(/;
-    results = (funcNameRegex).exec(entityClass.toString());
-    if (results? and results.length > 1) then results[1] else ""
     
 return EntityRepository

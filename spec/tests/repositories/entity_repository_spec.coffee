@@ -1,4 +1,5 @@
 EntityRepository = require 'scribe/repositories/entity_repository'
+EntityConstructorMap = require 'scribe/repositories/entity_constructor_map'
 
 describe "EntityRepository", ->
 	repo = null
@@ -11,6 +12,9 @@ describe "EntityRepository", ->
 
 	beforeEach ->
 		repo = new EntityRepository(ReferenceEntityOne)
+
+	afterEach ->
+		EntityConstructorMap.ctors = {}
 
 	describe "#canHandle", ->
 
