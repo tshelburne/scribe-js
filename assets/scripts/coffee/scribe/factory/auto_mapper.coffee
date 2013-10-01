@@ -1,3 +1,5 @@
+EntityConstructorMap = require 'scribe/repositories/entity_constructor_map'
+
 # 
 # @author - Tim Shelburne (tim@musiconelive.com)
 #
@@ -8,7 +10,7 @@ class AutoMapper
 
   constructor: (@entityClass, @referenceBuilder=null)->
 
-  canHandle: (entityClass)-> entityClass is @entityClass.name
+  canHandle: (entityClass)-> EntityConstructorMap.match(entityClass, @entityClass)
 
   handle: (config)-> 
     entity = map.call @, config
