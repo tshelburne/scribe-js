@@ -7,7 +7,7 @@ module Scribe
 	end
 
 	def self.keystone_compiler
-		@@keystone_compiler ||= pipeline.compiler("scribe.js")
+		@@keystone_compiler ||= pipeline.compiler("scribe.min.js")
 	end
 
 	def self.root_path
